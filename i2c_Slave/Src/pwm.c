@@ -12,7 +12,7 @@ void TIMx_PWM_Init()  {
 	GPIO_Init(GPIO_Port_PWM, &GPIO_InitStructure);
   
   TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
-	TIM_TimeBaseStructure.TIM_Period = 100;  
+	TIM_TimeBaseStructure.TIM_Period = 1000;  // the resolution
 	TIM_TimeBaseStructure.TIM_Prescaler = 0; 
 	TIM_TimeBaseStructure.TIM_ClockDivision = 0;  
 	TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;  
@@ -29,7 +29,7 @@ void TIMx_PWM_Init()  {
 }
 
 void pwm_out(int pwmval){
-	if (pwmval > 0){
+	if (pwmval >= 0){
 		TIM_SetCompare3(TIMx,0);
 		TIM_SetCompare4(TIMx,pwmval);
 	}

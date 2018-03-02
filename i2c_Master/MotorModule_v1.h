@@ -10,7 +10,7 @@ class MotorObject{
 public:
   MotorObject();
   void getMotorState(int* count, bool* collide); // Motor state components: encoder count (int32_t) & collision (bool)
-  void sendPwmPercent(uint8_t pwm);                // Send PWM value to slave
+  void sendPwm(int pwm);                // Send PWM value to slave
   void setSlaveAddress(uint8_t addr);            // Specify slave address
   void Reverse();                                // Call to set flag & reverse default direction
 
@@ -18,6 +18,7 @@ private:
   uint8_t address;                               // Slave address of STM32 motor control module
   bool rev;                                      // Direction reverse flag
   int hex2dec(uint8_t* hex);                     // Convert hexadecimal byte readings to decimal integer values
+  uint8_t* dec2hex(int dec);
 };
 
 #endif

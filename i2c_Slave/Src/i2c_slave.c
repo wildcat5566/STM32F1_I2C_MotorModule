@@ -5,7 +5,10 @@
 int dec;
 uint8_t *hex;
 uint8_t bufferindex = 0;
+uint8_t bufferindex2 = 0;
 int p[3] = {16777216, 65536, 256};
+int in0, in1;
+int recvbuff[3];
 
 void i2c_init(void){
 	
@@ -71,9 +74,15 @@ void I2C1_EV_IRQHandler(void) {
   event=I2C_GetLastEvent(I2C1); // Read last event
 	
 	if(event==I2C_EVENT_SLAVE_RECEIVER_ADDRESS_MATCHED) {
+		pwm_in = recvbuff[1]*256 + recvbuff[2];
+		if(recvbuff[0]==1){
+			pwm_in *= -1;
+		}
+		bufferindex2 = 0;
   }
   else if(event==I2C_EVENT_SLAVE_BYTE_RECEIVED) {
-    pwm_in=I2C_ReceiveData(I2Cx) - 100;
+    recvbuff[bufferindex2]=I2C_ReceiveData(I2Cx);
+		bufferindex2++;
   }
 
   else if(event==I2C_EVENT_SLAVE_TRANSMITTER_ADDRESS_MATCHED) {

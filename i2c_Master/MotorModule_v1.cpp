@@ -24,15 +24,14 @@ void MotorObject::getMotorState(int* count, bool* collide){
   *count = hex2dec(data);
 }
 
-void MotorObject::sendPwmPercent(uint8_t pwm){
-  //if(pwm <= 100 && pwm >= -100){
+void MotorObject::sendPwm(int pwm){
     Wire.beginTransmission(address);
-    Wire.write(pwm + 100);
+    uint8_t* hex;
+    hex = dec2hex(pwm);
+    for(int i = 0; i < 3; i ++){
+      Wire.write(hex[i]);
+    }
     Wire.endTransmission();
-  //}
-  //else{
-  //  Serial.print("PWM value: please set between +100 and -100");
-  //}
 }
 void MotorObject::setSlaveAddress(uint8_t addr){
   address = addr;
@@ -50,4 +49,18 @@ int MotorObject::hex2dec(uint8_t *hex){
   }
   return dec;
 }
-  
+
+uint8_t* MotorObject::dec2hex(int dec){
+  static uint8_t hex[3];
+  if(dec < 0){
+    dec = dec * (-1);
+    hex[0] = 1;
+  }
+  else{
+    hex[0] = 0;
+  }
+  hex[1] = dec / 256;
+  hex[2] = dec - hex[1]*256;
+  return hex;
+}
+
