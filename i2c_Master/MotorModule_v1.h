@@ -10,6 +10,7 @@ class MotorObject{
 public:
   MotorObject();
   void getMotorState(int* count, bool* collide); // Motor state components: encoder count (int32_t) & collision (bool)
+  void getMotorState(int* count);
   void sendPwm(int pwm);                // Send PWM value to slave
   void setSlaveAddress(uint8_t addr);            // Specify slave address
   void Reverse();                                // Call to set flag & reverse default direction

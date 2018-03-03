@@ -73,7 +73,8 @@ void I2C1_EV_IRQHandler(void) {
   _Bool sign;
   event=I2C_GetLastEvent(I2C1); // Read last event
 	
-	if(event==I2C_EVENT_SLAVE_RECEIVER_ADDRESS_MATCHED) {
+	if(event==I2C_EVENT_SLAVE_RECEIVER_ADDRESS_MATCHED) { 
+		
 		pwm_in = recvbuff[1]*256 + recvbuff[2];
 		if(recvbuff[0]==1){
 			pwm_in *= -1;
@@ -85,7 +86,8 @@ void I2C1_EV_IRQHandler(void) {
 		bufferindex2++;
   }
 
-  else if(event==I2C_EVENT_SLAVE_TRANSMITTER_ADDRESS_MATCHED) {
+  else if(event==I2C_EVENT_SLAVE_TRANSMITTER_ADDRESS_MATCHED) { 
+		
 		dec = count;
     sign = (dec < 0);
 		I2C_SendData(I2C1, collide);
