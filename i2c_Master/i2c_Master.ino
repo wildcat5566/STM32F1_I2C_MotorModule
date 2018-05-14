@@ -1,7 +1,8 @@
 #include "MotorModule_v1.h"
 #include <PID_v1.h>
 
-#define RelayPin 22
+#define RelayPin0 2
+#define RelayPin1 4
 #define ExtResetPin 23
 MotorObject FR, FL, RR, RL, WR, WL;
 int fr_count, fl_count, rr_count, rl_count, wr_count, wl_count;
@@ -44,16 +45,18 @@ void setup() {
   RL.setSlaveAddress(0x4F);  // Rear Left
   FR.Reverse(); WR.Reverse();
   
-  pinMode(RelayPin, OUTPUT);
-  digitalWrite(RelayPin, HIGH);
+  pinMode(RelayPin0, OUTPUT);
+  pinMode(RelayPin1, OUTPUT);
+  digitalWrite(RelayPin0, HIGH);
+  digitalWrite(RelayPin1, HIGH);
 
   PID_init();
   PWMmax = 100;
 }
 int i = 0;
 void loop() {
-  if(i<500){
-    i++;
+  if(i<=500){
+    i+=1;
   }
   FR.getMotorState(&fr_count, &fr_collide);
   FL.getMotorState(&fl_count, &fl_collide);
@@ -62,39 +65,18 @@ void loop() {
   WR.getMotorState(&wr_count);
   WL.getMotorState(&wl_count);
 
-  RL_Feed = rl_count;
-  RR_Feed = rr_count;
-
-  RL_Set += 100;
-  RR_Set += 100;
-
-  RL_PID.SetTunings(P_Kp, P_Ki, P_Kd);
-  RR_PID.SetTunings(P_Kp, P_Ki, P_Kd);
-
-  RL_PID.Compute();
-  RR_PID.Compute();
-    
+  RL.sendPwm(i);
+  RR.sendPwm(i);
   FR.sendPwm(i);
   FL.sendPwm(i);
-  RR.sendPwm(RR_PWMvalue);
-  RL.sendPwm(RL_PWMvalue);
-  WR.sendPwm(i);
-  WL.sendPwm(i);
+  //WR.sendPwm(i);
+  //WL.sendPwm(i);
   
-  Serial.print("rl_count: \t ");Serial.print(rl_count);
-  Serial.print("  rr_count: \t ");Serial.print(rr_count);
-  Serial.print("  rl_set: \t ");Serial.print(RL_Set);
-  Serial.print("  rr_set: \t ");Serial.print(RR_Set);
-  Serial.print("  rl_PWM: \t ");Serial.print(RL_PWMvalue);
-  Serial.print("  rr_PWM: \t ");Serial.println(RR_PWMvalue);  
-/*  Serial.print("  rear_left: \t ");Serial.print(rl_count);
-  Serial.print("  rear_right: \t ");Serial.print(rr_count);
-  Serial.print("  waist_left: \t ");Serial.print(wl_count);
-  Serial.print("  waist_right: \t ");Serial.println(wr_count);*/
-
-  /*Serial.print("\t ");Serial.print(fl_collide);
-Serial.print("\t ");Serial.print(fr_collide);
-Serial.print("\t ");Serial.print(rl_collide);
-Serial.print("\t ");Serial.println(rr_collide);*/
+  Serial.print(" fr_count: \t ");Serial.print(fr_count);
+  Serial.print(" fl_count: \t ");Serial.print(fl_count);
+  Serial.print(" rr_count: \t ");Serial.print(rr_count);
+  Serial.print(" rl_count: \t ");Serial.print(rl_count);
+  Serial.print(" wr_count: \t ");Serial.print(wr_count);
+  Serial.print(" wl_count: \t ");Serial.println(wl_count);
 
 }
