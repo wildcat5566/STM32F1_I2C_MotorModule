@@ -41,10 +41,12 @@ void setup() {
   FL.setSlaveAddress(0x4B); // Front left
   WR.setSlaveAddress(0x4C);  // Waist Right
   FR.setSlaveAddress(0x4D);  // Front Right
-  RR.setSlaveAddress(0x4E); // Rear Right
-  RL.setSlaveAddress(0x4F);  // Rear Left
-  FR.Reverse(); WR.Reverse();
-  
+  RL.setSlaveAddress(0x4E); // Rear Right
+  RR.setSlaveAddress(0x4F);  // Rear Left
+  FR.Reverse(); 
+  WR.Reverse();
+
+  delay(3000);
   pinMode(RelayPin0, OUTPUT);
   pinMode(RelayPin1, OUTPUT);
   digitalWrite(RelayPin0, HIGH);
@@ -55,7 +57,7 @@ void setup() {
 }
 int i = 0;
 void loop() {
-  if(i<=500){
+  if(i<=50){
     i+=1;
   }
   FR.getMotorState(&fr_count, &fr_collide);
